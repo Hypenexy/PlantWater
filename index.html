@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlantWater</title>
+    <link rel="stylesheet" href="assets/style/style.css">
+</head>
+<body>
+    <div class="home">
+        <div class="mdblock">
+            <h1>An open source, <b>Arduino</b>, plant watering project</h1>
+            <div class="buttons">
+                <div class="button"><p>Purchase</p><p>Get all parts and software preconfigured</p></div>
+                <div class="button"><p>Read tutorial</p><p>A step by step tutorial to make it yourself</p></div>
+            </div>
+        </div>
+    </div>
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script type="importmap">
+    {
+        "imports": {
+        "three": "https://unpkg.com/three@0.152.2/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.152.2/examples/jsm/"
+        }
+    }
+    </script>
+    <script>
+    </script>
+    <script type="module">
+        import * as THREE from 'three';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+        const canvas = document.createElement("canvas");
+        canvas.classList.add("threejs")
+        document.body.appendChild(canvas);
+
+        const scene = new THREE.Scene();
+        const colorWhite = new THREE.Color();
+        scene.background = colorWhite;
+
+        // fix camera init (ratio)
+        const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+        const renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: true});
+        function sizeRenderer(){
+            // Fix to only take normal width of webpage 100% not 100vw
+            renderer.setSize(window.innerWidth, 900);
+            camera.aspect = window.innerWidth / 900;
+            camera.updateProjectionMatrix();
+        }
+        sizeRenderer();
+        document.body.appendChild( renderer.domElement );
+
+        // const geometry = new THREE.BoxGeometry( 1, .15, 1 );
+        // const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+        // const cube = new THREE.Mesh( geometry, material );
+        // scene.add( cube );
+
+        const loader = new GLTFLoader();
+
+        loader.load('assets/models/arduino_uno.glb', function ( gltf ) {
+            scene.add( gltf.scene );
+            gltf.scene.rotation.y = -1.4;
+        }, undefined, function ( error ) {
+            console.error( error );
+        });
+        
+        const ambientLight = new THREE.AmbientLight( 0xbbbbbb );
+        scene.add( ambientLight );
+
+        const pointLight = new THREE.PointLight( 0x00ff00, 4, 40 );
+        pointLight.position.set( -10, 2, 10 );
+        scene.add( pointLight );
+
+        camera.position.x = -1;
+        camera.position.y = 2;
+        camera.position.z = 1;
+        
+        camera.rotation.x = 5;
+
+        function animate() {
+            requestAnimationFrame( animate );
+
+            // camera.rotation.x += .004;
+            // camera.position.y += 0.01
+            // cube.rotation.x += 0.001;
+            // cube.rotation.y += 0.01;
+
+            renderer.render( scene, camera );
+        }
+
+        animate();
+
+
+        window.addEventListener('resize', onWindowResize, false);
+        var resizeTimeout = {duration: 50};
+
+        function onWindowResize(){
+            clearTimeout(resizeTimeout.timeout);
+            resizeTimeout.timeout = setTimeout(function(){
+                sizeRenderer();
+            }, resizeTimeout.duration);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+"Arduino Uno R3, Elegoo" (https://skfb.ly/oGEJS) by Lassi Kaukonen is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+"Arduino Uno" (https://skfb.ly/6RUK6) by kakaeka is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
