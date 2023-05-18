@@ -17,16 +17,20 @@
             </div>
         </div>
     </div>
+    <div class="panel about">
+        <div class="mdblock">
+            <h1>About the project</h1>
+            <p>Built to serve plants...</p>
+        </div>
+    </div>
     <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
     <script type="importmap">
-    {
-        "imports": {
-        "three": "https://unpkg.com/three@0.152.2/build/three.module.js",
-        "three/addons/": "https://unpkg.com/three@0.152.2/examples/jsm/"
+        {
+            "imports": {
+            "three": "https://unpkg.com/three@0.152.2/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.152.2/examples/jsm/"
+            }
         }
-    }
-    </script>
-    <script>
     </script>
     <script type="module">
         import * as THREE from 'three';
@@ -38,17 +42,22 @@
 
         const scene = new THREE.Scene();
         const colorWhite = new THREE.Color();
-        scene.background = colorWhite;
+        // scene.background = colorWhite;
 
         // fix camera init (ratio)
         const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
-        const renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: true});
+        const renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: true, alpha: true });
         function sizeRenderer(){
-            // Fix to only take normal width of webpage 100% not 100vw
-            renderer.setSize(window.innerWidth, 900);
-            camera.aspect = window.innerWidth / 900;
+            const width = window.innerWidth - 20;
+            // I wanna change height to more
+            // to not look weird, but aspect
+            // ratios are weird.
+            const height = 900;
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
             camera.updateProjectionMatrix();
+            positionUpdate();
         }
         sizeRenderer();
         document.body.appendChild( renderer.domElement );
@@ -59,14 +68,40 @@
         // scene.add( cube );
 
         const loader = new GLTFLoader();
+        var arduinoModel;
+        function positionUpdate(){
+            if(arduinoModel){
+                arduinoModel.position.x = (window.innerWidth/1000) - .4;
+            }
+        }
 
-        loader.load('assets/models/arduino_uno.glb', function ( gltf ) {
-            scene.add( gltf.scene );
-            gltf.scene.rotation.y = -1.4;
+        loader.load('assets/models/arduino_uno.glb', function (gltf) {
+            arduinoModel = gltf.scene;
+            arduinoModel.position.x = .6;
+            // arduinoModel.rotation.x = -.75;
+            // arduinoModel.rotation.z = .15;
+            // arduinoModel.rotation.y = .15;
+            arduinoModel.rotation.x = -.62;
+            arduinoModel.rotation.y = -.276;
+            arduinoModel.rotation.z = -.25;
+            scene.add(arduinoModel);
         }, undefined, function ( error ) {
             console.error( error );
         });
-        
+
+        loader.load('assets/models/monstera_deliciosa_potted_mid-century_plant.glb', function (gltf) {
+            gltf.scene.position.x = -1;
+            gltf.scene.position.y = -.5;
+            gltf.scene.position.z = 1;
+            // gltf.scene.rotation.x = .75;
+            // gltf.scene.rotation.z = .15;
+            // gltf.scene.rotation.y = .15;
+            scene.add(gltf.scene);
+        }, undefined, function ( error ) {
+            console.error( error );
+        });
+
+        // Lights
         const ambientLight = new THREE.AmbientLight( 0xbbbbbb );
         scene.add( ambientLight );
 
@@ -74,15 +109,32 @@
         pointLight.position.set( -10, 2, 10 );
         scene.add( pointLight );
 
-        camera.position.x = -1;
-        camera.position.y = 2;
-        camera.position.z = 1;
-        
-        camera.rotation.x = 5;
+        // Line
+        function line(){
+            const material = new THREE.LineBasicMaterial( { color: 0x00bfcd } );
+            const points = [];
+            points.push( new THREE.Vector3( -3, -1, 0 ) );
+            points.push( new THREE.Vector3( 0, -.5, 0 ) );
+            points.push( new THREE.Vector3( 3, -1, 0 ) );
 
+            const geometry = new THREE.BufferGeometry().setFromPoints( points );
+            const line = new THREE.Line( geometry, material );
+            return line;
+        }
+        scene.add( line() );
+
+        // Camera view
+        camera.position.x = 0;
+        camera.position.y = 0;
+        camera.position.z = 2;
+
+        // camera.rotation.x = 5;
+
+        // Run render
         function animate() {
             requestAnimationFrame( animate );
 
+            // arduinoModel.rotation.x += .001
             // camera.rotation.x += .004;
             // camera.position.y += 0.01
             // cube.rotation.x += 0.001;
@@ -93,7 +145,7 @@
 
         animate();
 
-
+        // Resize on resize
         window.addEventListener('resize', onWindowResize, false);
         var resizeTimeout = {duration: 50};
 

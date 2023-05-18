@@ -27,6 +27,8 @@
 }
 
 .home{
+	z-index: 4;
+	position: relative;
     padding: 100px 0;
 }
 
@@ -58,6 +60,7 @@
 	color: #00bfcd;
 	background-color: #D6FFFE;
 	border-radius: 12px;
+	transition: .2s;
 }
 .home .buttons .button:first-child{
 	margin-bottom: 12px;
@@ -69,10 +72,15 @@
 .home .buttons .button p:last-child{
 	font-size: 13px;
 }
+.home .buttons .button:hover, .home .buttons .button:focus-visible{
+	color: #D6FFFE;
+	background-color: #00bfcd;
+}
 
 .threejs{
+	pointer-events: none;
 	position: absolute;
-	z-index: -1;
+	z-index: 1;
 	top: 0;
 	width: 50%;
 }
@@ -89,4 +97,15 @@
 	.home h1{
 		font-size: 1.5em;
 	}
+}
+
+.panel.about{
+	text-align: center;
+	color: #F0FFFF;
+	background: rgb(0 205 117);
+}
+
+.panel.about h1{
+	font-size: 3em;
+	padding: 20px 0;
 }
