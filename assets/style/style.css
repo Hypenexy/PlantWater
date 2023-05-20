@@ -26,10 +26,23 @@
 	}
 }
 
+::-webkit-scrollbar{
+	width: 12px;
+}
+::-webkit-scrollbar-thumb{
+	background: #ddd;
+	padding: 4px;
+	border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover{
+	background: #bbb;
+}
+
 .home{
 	z-index: 4;
 	position: relative;
     padding: 100px 0;
+    min-height: 650px;
 }
 
 .home h1{
@@ -43,23 +56,25 @@
 }
 
 .home .buttons{
-	padding: 12px;
+	/* padding: 12px;
 	border-radius: 12px;
-	box-shadow: 2px 2px 4px #bbb;
+	box-shadow: 2px 2px 4px #bbb; */
 	display: block;
 	margin-top: 24px;
 	max-width: 350px;
 }
 
 .home .buttons .button{
+	position: relative;
 	cursor: pointer;
 	user-select: none;
 	display: block;
 	text-align: center;
 	padding: 12px;
 	color: #00bfcd;
-	background-color: #D6FFFE;
+	background-color: #D6FFFEee;
 	border-radius: 12px;
+	box-shadow: 1px 1px 3px #66666644;
 	transition: .2s;
 }
 .home .buttons .button:first-child{
@@ -71,6 +86,16 @@
 }
 .home .buttons .button p:last-child{
 	font-size: 13px;
+}
+.home .buttons .button .bgfx{
+	z-index: -1;
+	position: absolute;
+	border-radius: 12px;
+	backdrop-filter: blur(4px);
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
 }
 .home .buttons .button:hover, .home .buttons .button:focus-visible{
 	color: #D6FFFE;
@@ -99,13 +124,46 @@
 	}
 }
 
+.panel h1{
+	font-size: 3em;
+	padding: 20px 0;
+}
+.panel p{
+	font-size: 2em;
+}
+
 .panel.about{
+	position: relative;
 	text-align: center;
 	color: #F0FFFF;
 	background: rgb(0 205 117);
+	padding: 200px 0;
+}
+.panel.about p{
+	padding-left: 250px;
+	text-align: left;
+}
+@media screen and (max-width: 650px) {
+	.panel.about p{
+		padding-left: initial;
+	}
+}
+.panel.about #arduinocredit{
+	position: absolute;
+	top: 90px;
+	text-align: center;
+	width: 100%;
+	padding: initial;
+	left: 0;
+	opacity: 0;
+	transition: .3s;
+}
+.panel.about #arduinocredit.active{
+	opacity: 1;
 }
 
-.panel.about h1{
-	font-size: 3em;
-	padding: 20px 0;
+.panel.features{
+	color: #0d43a7;
+	background: #D6FFFE;
+	padding: 100px 0;
 }
