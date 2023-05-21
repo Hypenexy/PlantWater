@@ -27,19 +27,21 @@
     <div class="panel features">
         <div class="mdblock">
             <h1>Features</h1>
-            <p>This is my school internship project, it measures the humidity in a plant's pot and can pump water into it.</p>
+            <p>Detect moisture level at soil</p>
+            <p>UI interface to change stuff like when to water and how much</p>
+            <p>Data logging</p>
         </div>
     </div>
     <div class="panel technologies">
         <div class="mdblock">
             <h1>Technologies Summary</h1>
-            <p>This is my school internship project, it measures the humidity in a plant's pot and can pump water into it.</p>
+            <p>Using an Arduino as a control, simple C++ code does the whole job.</p>
         </div>
     </div>
     <div class="panel me">
         <div class="mdblock">
             <h1>About Me</h1>
-            <p>This is my school internship project, it measures the humidity in a plant's pot and can pump water into it.</p>
+            <p>I am me.</p>
         </div>
     </div>
     <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
@@ -51,188 +53,6 @@
             }
         }
     </script>
-    <script type="module">
-        import * as THREE from 'three';
-        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-
-        const canvas = document.createElement("canvas");
-        canvas.classList.add("threejs")
-        document.body.appendChild(canvas);
-
-        const scene = new THREE.Scene();
-        const colorWhite = new THREE.Color();
-        // scene.background = colorWhite;
-
-        // fix camera init (ratio)
-        const camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.1, 1000 );
-
-        const renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: true, alpha: true });
-        function sizeRenderer(){
-            const width = window.innerWidth - 12;
-            // I wanna change height to more
-            // to not look weird, but aspect
-            // ratios are weird.
-            const height = 1200;
-            renderer.setSize(width, height);
-            camera.aspect = width / height;
-            camera.updateProjectionMatrix();
-            positionUpdate();
-        }
-        sizeRenderer();
-        document.body.appendChild( renderer.domElement );
-
-        // const geometry = new THREE.BoxGeometry( 1, .15, 1 );
-        // const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-        // const cube = new THREE.Mesh( geometry, material );
-        // scene.add( cube );
-
-
-        /**
-         * 
-         * @param n 
-         * @param x 
-         * @param y 
-         * @returns 
-         */
-        function rangeTranslate(n, x, y){
-            var OldRange = (x[1] - x[0]);
-            var NewRange = (y[1] - y[0]);
-            return (((n - x[0]) * NewRange) / OldRange) + y[0];
-        }
-
-        const loader = new GLTFLoader();
-        var arduinoModel;
-        var arduinocredit = document.getElementById("arduinocredit");
-        function positionUpdate(){
-            if(arduinoModel){
-                // arduinoModel.position.x = (window.innerWidth/1000)-.4;
-                // arduinoModel.position.y = .5;
-                
-                // arduinoModel.position.x = (window.innerWidth/1000)-.4;
-                if(window.scrollY<=300){
-                    // arduinoModel.rotation.x = -.62;
-                    // arduinoModel.rotation.x = -.62*window.scrollY/100;
-                    arduinoModel.rotation.x = rangeTranslate(window.scrollY/100, [0, 3], [-.62, 0]);
-                    arduinoModel.rotation.y = rangeTranslate(window.scrollY/100, [0, 3], [-.276, 0]);
-                    arduinoModel.rotation.z = rangeTranslate(window.scrollY/100, [0, 3], [-.25, 0]);
-                    arduinoModel.position.y = rangeTranslate(window.scrollY/100, [0, 3], [.5, 0]);
-                    // arduinoModel.position.x = rangeTranslate(1, [0, window.innerWidth/1000], [1, 1]) //-rangeTranslate(window.scrollY/100, [0, 3], [0, 1.5]);
-                    // arduinoModel.position.x = rangeTranslate(window.innerWidth/1000, [0, 1.5], [0, 1]);
-                    var x = window.innerWidth*1.5/1920;
-                    if(window.innerWidth<950){
-                        x = window.innerWidth*.6/950;
-                    }
-                    if(window.innerWidth<680){
-                        arduinoModel.position.y = rangeTranslate(window.scrollY/100, [0, 3], [.3, 0]);
-                        x = 0;
-                    }
-                    arduinoModel.position.x = rangeTranslate(window.scrollY/100, [0, 3], [x, 0]);
-                    // arduinoModel.position.x = 1.5;
-                }
-                if(window.scrollY<300){
-                    arduinocredit.classList.remove("active");
-                }
-                else{   
-                    arduinocredit.classList.add("active");
-                }
-            }
-            if(flowermodel){
-                flowermodel.position.x = -1;
-                if(window.innerWidth<1000){
-                    flowermodel.position.x = -.55;
-                }
-            }
-        }
-
-        loader.load('assets/models/arduino_uno.glb', function (gltf) {
-            arduinoModel = gltf.scene;
-            // arduinoModel.position.x = .6;
-            // arduinoModel.scale(2, 2, 2);
-            // arduinoModel.rotation.x = -.75;
-            // arduinoModel.rotation.z = .15;
-            // arduinoModel.rotation.y = .15;
-            positionUpdate()
-            scene.add(arduinoModel);
-        }, undefined, function ( error ) {
-            console.error( error );
-        });
-
-
-        var flowermodel;
-        loader.load('assets/models/monstera_deliciosa_potted_mid-century_plant.glb', function (gltf) {
-            flowermodel = gltf.scene;
-            flowermodel.position.x = -1;
-            flowermodel.position.y = -.34;
-            flowermodel.position.z = 1;
-            // gltf.scene.rotation.x = .75;
-            // gltf.scene.rotation.z = .15;
-            // gltf.scene.rotation.y = .15;
-            positionUpdate()
-            scene.add(gltf.scene);
-        }, undefined, function ( error ) {
-            console.error( error );
-        });
-
-        // Lights
-        const ambientLight = new THREE.AmbientLight( 0xbbbbbb );
-        scene.add( ambientLight );
-
-        const pointLight = new THREE.PointLight( 0x00ff00, 4, 40 );
-        pointLight.position.set( -10, 2, 10 );
-        scene.add( pointLight );
-
-        // Line
-        // function line(){
-        //     const material = new THREE.LineBasicMaterial( { color: 0x00bfcd } );
-        //     const points = [];
-        //     points.push( new THREE.Vector3( -3, -1, 0 ) );
-        //     points.push( new THREE.Vector3( 0, -.5, 0 ) );
-        //     points.push( new THREE.Vector3( 3, -1, 0 ) );
-
-        //     const geometry = new THREE.BufferGeometry().setFromPoints( points );
-        //     const line = new THREE.Line( geometry, material );
-        //     return line;
-        // }
-        // scene.add( line() );
-
-        // Camera view
-        camera.position.x = 0;
-        camera.position.y = 0;
-        camera.position.z = 2;
-
-        // camera.rotation.x = 5;
-
-        // Run render
-        function animate() {
-            requestAnimationFrame( animate );
-
-            // arduinoModel.rotation.x += .001
-            // camera.rotation.x += .004;
-            // camera.position.y += 0.01
-            // cube.rotation.x += 0.001;
-            // cube.rotation.y += 0.01;
-
-            renderer.render( scene, camera );
-        }
-
-        animate();
-
-        // Resize on resize
-        window.addEventListener('resize', onWindowResize, false);
-        var resizeTimeout = {duration: 50};
-
-        function onWindowResize(){
-            clearTimeout(resizeTimeout.timeout);
-            resizeTimeout.timeout = setTimeout(function(){
-                sizeRenderer();
-            }, resizeTimeout.duration);
-        }
-
-        // Scroll animation
-        window.addEventListener('scroll', onWindowScroll)
-        function onWindowScroll(){
-            sizeRenderer();
-        }
-    </script>
+    <script type="module" src="assets/code/script.js"></script>
 </body>
 </html>
